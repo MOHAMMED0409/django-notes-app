@@ -16,22 +16,22 @@ pipeline {
         }
         stage("Build & Test"){
             steps{
-                sh "docker build . -t notes-app-jenkins:latest"
+                sh "docker build . -t notes-app:latest"
             }
         }
         stage("Push to DockerHub"){
             steps{
                 withCredentials(
                     [usernamePassword(
-                        credentialsId:"dockerCreds",
-                        passwordVariable:"dockerHubPass", 
-                        usernameVariable:"dockerHubUser"
+                        credentialsId:"dockerhub",
+                        passwordVariable:"dockerhubpass", 
+                        usernameVariable:"dockerhubuser"
                         )
                     ]
                 ){
-                sh "docker image tag notes-app-jenkins:latest ${env.dockerHubUser}/notes-app-jenkins:latest"
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker push ${env.dockerHubUser}/notes-app-jenkins:latest"
+                sh "docker image tag notes-app:latest ${env.dockerhubuser}/notes-app:latest"
+                sh "docker login -u ${env.dockerhubuser} -p ${env.dockerhubpass}"
+                sh "docker push ${env.dockerhubuser}/notes-app:latest"
                 }
             }
         }
